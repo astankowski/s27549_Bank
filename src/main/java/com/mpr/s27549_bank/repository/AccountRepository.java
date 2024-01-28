@@ -1,15 +1,18 @@
 package com.mpr.s27549_bank.repository;
 
 import com.mpr.s27549_bank.model.Account;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class AccountRepository {
-    private List<Account> accountList = new ArrayList<>();
+    private static List<Account> accountList = new ArrayList<>();
 
-    public Account create (Account account) {
+    public static Account create(Account account) {
         account.setId(accountList.size());
         accountList.add(account);
         return account;

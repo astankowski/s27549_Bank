@@ -9,7 +9,7 @@ public class Account {
     private Integer id;
     private String pesel;
     private Integer balance;
-    private Curency currency;
+    private Currency currency;
     private String name;
     private String surname;
 }
