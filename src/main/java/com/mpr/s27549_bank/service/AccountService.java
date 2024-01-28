@@ -17,6 +17,7 @@ public class AccountService {
         if (account.getId() == null) throw new ValidationException("id", "Cannot be blank");
         if (account.getPesel().isBlank()) throw new ValidationException("pesel", "Cannot be blank");
         if (account.getBalance() == null) throw new ValidationException("balance", "Cannot be blank");
+        if (account.getBalance() < 0) throw new ValidationException("balance", "Cannot be negative");
         if (account.getCurrency() == null) throw new ValidationException("currency", "Cannot be blank");
         if (account.getName().isBlank()) throw new ValidationException("name", "Cannot be blank");
         if (account.getSurname().isBlank()) throw new ValidationException("surname", "Cannot be blank");

@@ -14,7 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 public class accountController {
     private AccountService accountService;
-
     @GetMapping("/all")
     public ResponseEntity<List<Account>> getAllAccounts() {
         List<Account> allAccounts = accountService.getAllAccounts();
@@ -29,7 +28,7 @@ public class accountController {
         return ResponseEntity.ok(account);
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public ResponseEntity<Account> getAccountByPathVariable(@PathVariable Integer id) {
         Account account = accountService.getById(id);
 
