@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/account")
 @AllArgsConstructor
-public class accountController {
+public class AccountController {
     private AccountService accountService;
     @GetMapping("/all")
     public ResponseEntity<List<Account>> getAllAccounts() {
@@ -21,13 +21,15 @@ public class accountController {
         return ResponseEntity.ok(allAccounts);
     }
 
+    //http://localhost:8080/account/{id}
     @GetMapping
-    public ResponseEntity<Account> getAccountByParam(@RequestParam(required = false) Integer id) {
+    public ResponseEntity<Account> getAccountByParam(@RequestParam(required = true) Integer id) {
         Account account = accountService.getById(id);
 
         return ResponseEntity.ok(account);
     }
 
+    //http://localhost:8080/account?id={id}
     @GetMapping("/{id}")
     public ResponseEntity<Account> getAccountByPathVariable(@PathVariable Integer id) {
         Account account = accountService.getById(id);
@@ -37,17 +39,9 @@ public class accountController {
 
     @PostMapping("/create")
     public ResponseEntity<Account> createAccount(@RequestBody Account account) {
-        Account createdAccount = null;
-        createdAccount = accountService.create(account);
+        Account createdAccount = accountService.create(account);;
 
         return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(createdAccount);
-
-//        try {
-//            createdAccount = accountService.create(account);
-//            return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(createdAccount);
-//        } catch (HttpClientErrorException e){
-//            return ResponseEntity.badRequest().build();
-//        }
     }
 
 
