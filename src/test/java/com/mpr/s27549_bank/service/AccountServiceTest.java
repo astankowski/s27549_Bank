@@ -11,21 +11,62 @@ import static com.mpr.s27549_bank.model.Currency.PLN;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AccountServiceTest {
-    @Test
-    void shouldCreate() {
-        AccountRepository accountRepository = new AccountRepository();
-        AccountService accountService = new AccountService(accountRepository);
-        Account account = new Account(0, "36278462", 2, PLN, "a", "b");
+    private static AccountService accountService;
+    private static AccountRepository accountRepository;
+    private static Account account;
 
-        assertEquals(account.getId(), assertDoesNotThrow(()->accountService.create(account)));
+    @BeforeAll
+    static void beforeAll() {
+        accountRepository = new AccountRepository();
+        accountService = new AccountService(accountRepository);
+    }
+
+    @AfterEach
+    void tearDown() {
+        accountRepository.getAll().clear();
     }
 
     @Test
-    void shouldNotCreateNegativeBalance() {
-        AccountRepository accountRepository = new AccountRepository();
-        AccountService accountService = new AccountService(accountRepository);
-        Account account = new Account(0, "36278462", -2, PLN, "a", "b");
+    void shouldCreate() {
+        account = new Account("36217846211", 200, PLN, "name", "surname");
+        assertDoesNotThrow(()->accountService.create(account));
+        assertEquals(account.getId(), accountRepository.getAll().size() - 1);
+    }
 
-        assertEquals("Cannot be negative", assertThrows(ValidationException.class,()->accountService.create(account)).getMessage());
+    @Test
+    void shouldNotCreateOnNullPesel() {
+        assertThrows(NullPointerException.class,()->
+                accountService.create(new Account(null, 200, PLN, "name", "surname")));
+    }
+
+    @Test
+    void shouldNotCreateOnBlankPesel() {
+        account = new Account("", 200, PLN, "name", "surname");
+        assertThrows(ValidationException.class,()->accountService.create(account));
+    }
+    @Test
+    void shouldNotCreateOnNullData() {
+        assertThrows(NullPointerException.class,()->
+                accountService.create(new Account(null, null, null, null, null)));
+    }
+
+    @Test
+    void shouldNotCreateOnNegativeBalance() {
+        account = new Account("22323232323", -2, PLN, "name", "surname");
+        assertThrows(ValidationException.class,()->accountService.create(account));
+    }
+
+    @Test
+    void shouldGetAllAccounts() {
+        account = new Account("36217846211", 200, PLN, "name", "surname");
+        accountService.create(account);
+        assertEquals(account.getId(), accountRepository.getAll().size() - 1);
+    }
+
+    @Test
+    void shouldGetById() {
+        account = new Account("36217846211", 200, PLN, "name", "surname");
+        accountService.create(account);
+        assertEquals(account.getId(), accountService.getById(account.getId()).getId());
     }
 }
